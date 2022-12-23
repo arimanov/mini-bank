@@ -1,15 +1,24 @@
 import express, { Express, Request, Response } from 'express';
-import { TestModel } from 'mb-shared';
+import { TestModel, LoginData } from 'mb-shared';
+import Database from './src/Database';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT;
 
-app.get('/', (req: Request, res: Response) => {
+const port = process.env.PORT;
+const env: string = process.env.ENV || '';
+
+const data = new Database(env);
+
+
+
+app.get('/', async (req: Request, res: Response) => {
   //console.log(TestModel);
-  res.send('Express + TypeScript Server');
+  const tables = await data.getCustomers();
+  res.send(tables);
+  
 });
 
 app.listen(port, () => {
